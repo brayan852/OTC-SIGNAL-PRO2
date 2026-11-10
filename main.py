@@ -3,7 +3,7 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 import threading
 import time
 
-# 1. Servidor web falso para satisfacer los requisitos de puertos de Render
+# 1. Servidor web para mantener contento a Render
 class SimpleHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
@@ -15,17 +15,14 @@ def run_server():
     server = HTTPServer(('0.0.0.0', port), SimpleHandler)
     server.serve_forever()
 
-# Arrancar el servidor web en segundo plano
 threading.Thread(target=run_server, daemon=True).start()
 
-print("Servidor web encendido correctamente en Render.")
-
-# 2. Cargar y mantener la ejecución del bot de Telegram
+# 2. Importar y arrancar tu lógica de Telegram
 try:
-    import telegram_bot
+    import telegram_bot  # O el nombre del archivo donde tengas el código principal de tu bot
 except Exception as e:
-    print(f"Error cargando el bot: {e}")
+    print(f"Error al iniciar el bot: {e}")
 
-# Bucle infinito para evitar que el proceso finalice de forma prematura
+# Mantener vivo el proceso
 while True:
     time.sleep(3600)
