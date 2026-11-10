@@ -1,8 +1,9 @@
 import os
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import threading
+import time
 
-# Servidor web falso para que Render detecte el puerto y no cierre el bot
+# 1. Servidor web falso para satisfacer los requisitos de puertos de Render
 class SimpleHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
@@ -14,5 +15,17 @@ def run_server():
     server = HTTPServer(('0.0.0.0', port), SimpleHandler)
     server.serve_forever()
 
-# Ejecutar el servidor en segundo plano
+# Arrancar el servidor web en segundo plano
 threading.Thread(target=run_server, daemon=True).start()
+
+print("Servidor web encendido correctamente en Render.")
+
+# 2. Cargar y mantener la ejecución del bot de Telegram
+try:
+    import telegram_bot
+except Exception as e:
+    print(f"Error cargando el bot: {e}")
+
+# Bucle infinito para evitar que el proceso finalice de forma prematura
+while True:
+    time.sleep(3600)
